@@ -1,0 +1,23 @@
+{
+  "name": "iconquix",
+  "version": "1.0.1",
+  "main": "iconquix.js",
+  "author": "quixtools",
+  "description": "SVG web icons for free",
+  "homepage": "https://www.iconquix.com/",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quixtools/iconquix.git"
+  },
+  "keywords": [
+    "svg",
+    "icon"
+  ],
+  "bugs": {
+    "url": "https://github.com/quixtools/iconquix/issues"
+  }
+}
