@@ -499,26 +499,24 @@ const iconQuixData  = {
 };
 
 class iconQuix extends HTMLElement {
-  constructor() {
-    super();
-  }
-  static get observedAttributes() {
-    return ['icon'];
-  }
-  render() {
-    const attrList =this.getAttributeNames();
-    const svgString = iconQuixData[this.getAttribute('icon')] ? `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64">${iconQuixData[this.getAttribute('icon')]}</svg>` : '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64"></svg>';
-    let svgElement = new DOMParser().parseFromString(svgString, 'image/svg+xml').querySelector('svg');
-    if (attrList.length > 0) {
-      attrList.forEach((attrItem) => {
-        if (attrItem !== 'icon') svgElement.setAttribute(attrItem, this.getAttribute(attrItem));
-      });
+    constructor() {
+        super();
     }
-    this.appendChild(svgElement, this);
-  }
-  attributeChangedCallback () {
-    this.innerHTML = '';
-    this.render();
-  }
+    render() {
+        const attrList =this.getAttributeNames();
+        const iconParent = this.parentNode;
+        const svgString = iconQuixData[this.getAttribute('icon')] ? `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64">${iconQuixData[this.getAttribute('icon')]}</svg>` : '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64"></svg>';
+        let svgElement = new DOMParser().parseFromString(svgString, 'image/svg+xml').querySelector('svg');
+        if (attrList.length > 0) {
+            attrList.forEach((attrItem) => {
+                if (attrItem !== 'icon')
+                    svgElement.setAttribute(attrItem, this.getAttribute(attrItem));
+            });
+        }
+        iconParent.replaceChild(svgElement, this);
+    }
+    connectedCallback() {
+        this.render();
+    }
 }
 customElements.define('icon-quix', iconQuix);
