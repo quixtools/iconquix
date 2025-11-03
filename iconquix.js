@@ -498,25 +498,41 @@ const iconQuixData  = {
     'paypal': '<path d="m17 2c-1.37 0-2.47 1.06-2.62 2l-7.83 49.39c-0.12 0.7 0.37 1.91 1.44 1.91h11.65l2.79-17.52c0.23-1.49 1.45-2.45 2.51-2.45h6.66c6.8 0 14.18-2.54 18.1-9.77 2.27-4.48 3.39-10.26 2.73-13.56-0.95-5.58-5.43-10-16.43-10zm13 60c1.07 0 1.88-0.81 2.23-2l1.98-12.5c0.22-1.26 0.79-2.2 2.79-2.2 5.5 0 14.7-0.7 18.6-10.3 2.87-6.99 2.1-13.5-1.22-16.34-0.38 3.05-1.5 6-2.81 8.34-4.99 9-13.17 10.59-19.97 10.59h-4.59c-1.79 0-2.46 0.77-2.73 2.41l-3.28 20c-0.18 1 0 2 2 2z" fill="currentColor"/>',
 };
 
-class iconQuix extends HTMLElement {
-    constructor() {
-        super();
+class IconQuix extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  static get observedAttributes() {
+    return ['icon'];
+  }
+
+  connectedCallback() {
+    this.style.display = 'inline-flex';
+    this.style.alignItems = 'center';
+    this.style.justifyContent = 'center';
+    this.style.lineHeight = '1';
+  }
+  
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'icon' && oldValue !== newValue) {
+      this.render();
     }
-    render() {
-        const attrList =this.getAttributeNames();
-        const iconParent = this.parentNode;
-        const svgString = iconQuixData[this.getAttribute('icon')] ? `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64">${iconQuixData[this.getAttribute('icon')]}</svg>` : '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64"></svg>';
-        let svgElement = new DOMParser().parseFromString(svgString, 'image/svg+xml').querySelector('svg');
-        if (attrList.length > 0) {
-            attrList.forEach((attrItem) => {
-                if (attrItem !== 'icon')
-                    svgElement.setAttribute(attrItem, this.getAttribute(attrItem));
-            });
-        }
-        iconParent.replaceChild(svgElement, this);
-    }
-    connectedCallback() {
-        this.render();
-    }
+  }
+
+  render() {
+    const iconName = this.getAttribute('icon');
+    const svgString = iconQuixData[iconName]
+      ? `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64">${iconQuixData[iconName]}</svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 64 64"></svg>`;
+
+    const svgElement = new DOMParser()
+      .parseFromString(svgString, 'image/svg+xml')
+      .querySelector('svg');
+
+    this.textContent = '';
+    this.appendChild(svgElement);
+  }
 }
-customElements.define('icon-quix', iconQuix);
+
+customElements.define('icon-quix', IconQuix);
